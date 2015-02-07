@@ -1,0 +1,8 @@
+{
+  "name": "item-set",
+  "version": "0.0.1",
+  "repository": "",
+  "scripts": {
+    "test": "nodeunit test"
+  }
+}
