@@ -4,5 +4,8 @@
   "repository": "",
   "scripts": {
     "test": "nodeunit test"
+  },
+  "devDependencies": {
+    "nodeunit": "0.9.0"
   }
 }
