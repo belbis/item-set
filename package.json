@@ -3,9 +3,12 @@
   "version": "0.0.1",
   "repository": "https://github.com/belbis/item-set.git",
   "scripts": {
-    "test": "nodeunit test"
+    "test": "nodeunit test",
+    "coveralls": "jscoverage src && ITEMSET_COV=1 nodeunit --reporter=lcov test | coveralls"
   },
   "devDependencies": {
-    "nodeunit": "0.9.0"
+    "nodeunit": "~0.9.0",
+    "coveralls": "~2.11.2",
+    "jscoverage": "~0.5.9"
   }
 }
