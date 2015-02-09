@@ -11,18 +11,46 @@ var Set = sets.Set,
   BinarySet = sets.BinarySet;
 
 var testSet = function(test) {
+  test.expect(18);
 
-  var s = new Set([1, 2, 3]);
+  var arr = [1,2,3],
+    obj = {1:1, 2:2, 3:3},
+    sArr = new Set(arr),
+    sObj = new Set(obj),
+    sObjVal = new Set(obj, {byValue: true});
 
   // test non new constructor
-  var s2 = Set([1,2,3]);
-  test.ok(s2 instanceof Set);
+  var s2Arr = Set(arr);
+  var s2Obj = Set(obj);
+  var s2ObjVal = Set(obj, {byValue: true});
+  test.ok(s2Arr instanceof Set, "array non new constructor");
+  test.ok(s2Obj instanceof Set, "object keys non new constructor");
+  test.ok(s2ObjVal instanceof Set, "object values non new constructor");
 
-  test.ok(s.isMember(1));
+
+  // test value membership
+  test.ok(sArr.isMember(1), "array value membership");
+  test.ok(sObj.isMember("1"), "object keys membership");
+  test.ok(sObjVal.isMember(1), "object values membership");
 
   // test add
-  s.add(1);
-  test.equal(s.length, 3);
+  sArr.add(1);
+  sObj.add(1);
+  sObjVal.add(1);
+  test.equal(sArr.length, 3, "array value existing member add");
+  test.equal(sObj.length, 3, "object keys existing member add");
+  test.equal(sObjVal.length, 3, "object values existing member add")
+
+  // test iteration
+  var arrIterTest= function(v) {
+    test.ok(arr.indexOf(v) > -1);
+    },
+    objIterTest = function(v) {
+      test.ok(obj[v]);
+    };
+  sArr.each(arrIterTest);
+  sObj.each(objIterTest);
+  sObjVal.each(arrIterTest);
 
   // finish test
   test.done();
