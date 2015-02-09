@@ -11,10 +11,16 @@ var Set = sets.Set,
   BinarySet = sets.BinarySet;
 
 var testSet = function(test) {
-  var s = Set([1,2,3]);
+
+  var s = new Set([1, 2, 3]);
+
+  // test non new constructor
+  var s2 = Set([1,2,3]);
+  test.ok(s2 instanceof Set);
 
   test.ok(s.isMember(1));
 
+  // test add
   s.add(1);
   test.equal(s.length, 3);
 
@@ -24,6 +30,11 @@ var testSet = function(test) {
 
 var testStringSet = function(test) {
   var stringSet = new StringSet(["foo", "bar", "baz"]);
+
+  // test non new constructor
+  var s2 = StringSet(["foo","bar","baz"]);
+  test.ok(s2 instanceof StringSet);
+  test.ok(s2 instanceof Set);
 
   // attempt to add non-string
   test.ok(!stringSet.add(1));
@@ -45,7 +56,12 @@ var testStringSet = function(test) {
 };
 
 var testNumberSet = function(test) {
-  var numberSet = NumberSet([1,2,3]);
+  var numberSet = new NumberSet([1,2,3]);
+
+  // test non new constructor
+  var s2 = NumberSet([1,2,3]);
+  test.ok(s2 instanceof NumberSet);
+  test.ok(s2 instanceof Set);
 
   // add non number
   numberSet.add("4");
@@ -68,6 +84,11 @@ var testNumberSet = function(test) {
 
 var testBinarySet = function(test) {
   var binarySet = new BinarySet([new Buffer("01"), new Buffer("02"), new Buffer("03")]);
+
+  // test non new constructor
+  var s2 = BinarySet([new Buffer("01"), new Buffer("02"), new Buffer("03")]);
+  test.ok(s2 instanceof BinarySet);
+  test.ok(s2 instanceof Set);
 
   // add non buffer
   test.ok(!binarySet.add(1));
