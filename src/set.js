@@ -12,12 +12,18 @@ var errors = require(__dirname + '/errors');
  * to be used as a return object of dynamodb getItem
  * @constructor
  */
-function Set(iter) {
-  if (!(this instanceof Set)) return new Set(iter);
+function Set(iter, options) {
+  if (!(this instanceof Set)) return new Set(iter, options);
 
   this._o = {};
   this.length = 0;
 
+  // parse options
+  if (options) {
+    this.byValue = options.byValue || false; // for objects to use values instead of keys
+  }
+
+  // construct set
   if (iter) {
     if ( iter.constructor === Array) {
       this._arr_construct(iter)
@@ -28,6 +34,25 @@ function Set(iter) {
     }
   }
 }
+
+/**
+ * each
+ *
+ * ensure each implemented for iteration
+ * @param fn
+ */
+Set.prototype.each = function(fn) {
+  if (fn instanceof Function) { // type check fn
+    for (var i in this._o) {
+      if (this._o.hasOwnProperty(i)) {
+        var j = this._o[i](i);
+        fn(j);
+      }
+    }
+  } else {
+    throw new errors.InvalidParametersError();
+  }
+};
 
 /**
  * _check_value
@@ -62,7 +87,11 @@ Set.prototype._arr_construct = function(arr) {
 Set.prototype._obj_construct = function(obj) {
   for (var i in obj) {
     if (obj.hasOwnProperty(i)) {
-      this.add(i);
+      if (this.byValue) {
+        this.add(obj[i]);
+      } else {
+        this.add(i);
+      }
     }
   }
 };
@@ -93,10 +122,9 @@ Set.prototype.add = function(v) {
 Set.prototype._add = function(v) {
   if (!this._o.hasOwnProperty(v)) {
     this.length++;
-    this._o[v] = 1;
+    this._o[v] = v.constructor;
   }
 };
-
 
 /**
  * remove
@@ -130,7 +158,22 @@ Set.prototype._remove = function(v) {
  * @returns {boolean}
  */
 Set.prototype.isMember = function(v) {
-  return this._o.hasOwnProperty(v);
+  return this._o.hasOwnProperty(v) && this._o[v] === v.constructor;
+};
+
+/**
+ * getArray
+ *
+ * @returns {array} set values as array
+ */
+Set.prototype.getArray = function() {
+  var r = [];
+  for (var i in this._o) {
+    if (this._o.hasOwnProperty(i)) {
+      r.push(this._o[i](i));
+    }
+  }
+  return r;
 };
 
 /**
