@@ -2,8 +2,7 @@
  * unit tests for the Set objects
  */
 
-var errors = require(__dirname + "/../src/errors");
-var sets = require(__dirname + '/../src/set');
+var sets = require(__dirname + '/../');
 
 // set different set types
 var Set = sets.Set,
